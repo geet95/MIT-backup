@@ -1,0 +1,279 @@
+import tkMessageBox
+import Tkinter
+import pyDes
+strTemp=[]
+strIn=""
+word1=""
+res=""
+res1=""
+a=[]
+b=[]
+c=[]
+rail1 = ""
+rail2 = ""
+rail3 = ""
+class simpleapp_tk(Tkinter.Tk):
+    def __init__(self,parent):
+        Tkinter.Tk.__init__(self,parent)
+        self.parent = parent
+        self.initialize()
+
+    def initialize(self):
+        self.grid()
+
+	self.entryVariable = Tkinter.StringVar()
+        self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
+        self.entry.grid(column=0,row=50,sticky='EW')
+#	self.entry.bind("<Return>", self.OnPressEnter)
+	self.entryVariable.set(u"Enter plain text here.")
+
+	button = Tkinter.Button(self,text=u"Enter", command=self.OnButtonClick)
+        button.grid(column=1,row=50)
+
+	button1 = Tkinter.Button(self,text=u"Caesar", command=self.OnButton1Click)
+        button1.grid(column=0,row=100)
+	
+	button2 = Tkinter.Button(self,text=u"Playfair !", command=self.OnButton2Click)
+        button2.grid(column=0,row=200)
+	
+	button3 = Tkinter.Button(self,text=u"Railfence !", command=self.OnButton3Click)
+        button3.grid(column=0,row=400)
+
+	button4 = Tkinter.Button(self,text=u"DES !", command=self.OnButton4Click)
+        button4.grid(column=0,row=300)
+
+	button5 = Tkinter.Button(self,text=u"Caesar Decrypt", command=self.OnButton5Click)
+        button5.grid(column=1,row=100)
+	
+	button6 = Tkinter.Button(self,text=u"Playfair Decrypt!", command=self.OnButton6Click)
+        button6.grid(column=1,row=200)
+	
+	button7 = Tkinter.Button(self,text=u"Railfence Decrypt!", command=self.OnButton7Click)
+        button7.grid(column=1,row=400)
+
+	button8 = Tkinter.Button(self,text=u"DES Decrypt!", command=self.OnButton8Click)
+        button8.grid(column=1,row=300)
+
+	self.labelVariable = Tkinter.StringVar()
+        label = Tkinter.Label(self,textvariable=self.labelVariable,anchor="w",fg="white",bg="blue",text="\u BOSD")
+        label.grid(column=0,row=500,columnspan=1,sticky='EW')
+	self.labelVariable.set(u"Hello !")
+
+	self.labelVariable1 = Tkinter.StringVar()
+        label = Tkinter.Label(self,textvariable=self.labelVariable1,anchor="w",fg="black",bg="green")
+        label.grid(column=1,row=500,columnspan=1,sticky='EW')
+	self.labelVariable1.set(u"Hello !")
+
+	self.grid_columnconfigure(0,weight=1)
+
+    def OnButtonClick(self):  
+	tkMessageBox.showinfo("","Data entered") 	
+	strIn=self.entryVariable.get()
+	global word1
+	word1=strIn
+	#self.config(button3.state="DISABLED")
+	tkMessageBox.showinfo("","Data accepted")
+    def OnButton1Click(self):
+	word=word1
+	global res
+	rot=2
+	key='a b c d e f g h i j k l m n o p q r s t u v w x y z'
+	key=key.split()
+	#x=len(word)
+	result=''
+	for i in word:
+		j=key.index(i)
+		j=j+rot
+		j=j%26
+		result+=key[j]
+	print result
+	res=result
+	print res
+	self.labelVariable.set(result)	
+	tkMessageBox.showinfo("","Caesar chosen") 	
+    def OnButton5Click(self):
+	global res	
+	word=res
+	rot=2
+	key='a b c d e f g h i j k l m n o p q r s t u v w x y z'
+	key=key.split()
+	#x=len(word)
+	result=''
+	for i in word:
+		j=key.index(i)
+		j=j-rot
+		j=j%26
+		result+=key[j]
+	print result
+	res1=result
+	print res1
+	self.labelVariable1.set(result)	
+	tkMessageBox.showinfo("","Caesar Decrypt chosen") 	
+    def OnButton3Click(self):	
+	layers = int(3)
+	tkMessageBox.showinfo("","Railfence encrypt chosen") 
+	global word1	
+	key=word1
+    	#plainText = text.lower()
+	cipherText = ""
+	global rail1
+	global rail2
+	global rail3
+	global rail4
+	rail1=""
+	rail2=""
+	rail3=""
+	rail4=""
+	lenkey1=len(key)
+	if lenkey1%2!=0:
+		lenkey=lenkey1-1
+		i=0
+		while(i<lenkey):
+			rail4 +=key[i]
+			i+=1
+			rail1 +=key[i]
+			i+=1
+		print rail4
+		print rail1
+
+		lenrail4=len(rail4)
+		i=0
+		while(i<lenrail4):
+			rail2 +=rail4[i]
+			i+=2
+		i=1
+		while(i<lenrail4):
+			rail3 +=rail4[i]
+			i+=2
+		if(len(rail2)>len(rail3)):
+			rail3+=key[lenkey1-1]
+		else:
+			rail4+=key[lenkey1-1]
+		print rail2
+		print rail3
+		cipherText=rail2+rail1+rail3
+	else:
+		lenkey=lenkey1
+		i=0
+		while(i<lenkey):
+			rail4 +=key[i]
+			i+=1
+			rail1 +=key[i]
+			i+=1
+		print rail4
+		print rail1
+
+		lenrail4=len(rail4)
+		i=0
+		while(i<lenrail4):
+			rail2 +=rail4[i]
+			i+=2
+		i=1
+		while(i<lenrail4):
+			rail3 +=rail4[i]
+			i+=2
+		if(len(rail2)>len(rail3)):
+			rail3+=key[lenkey1-1]
+		else:
+			rail4+=key[lenkey1-1]
+		print rail2
+		print rail3
+	cipherText=rail2+rail1+rail3
+	res=cipherText
+	self.labelVariable.set(res)
+    def OnButton4Click(self):
+	data=word1
+	k=pyDes.des("DESCRYPT",pyDes.CBC,"\0\0\0\0\0\0\0\0",pad=None, padmode=pyDes.PAD_PKCS5)
+	d=k.encrypt(data)
+	s1=repr(d)
+	global res
+	res=k.decrypt(d)
+	
+	self.labelVariable.set(s1)
+	tkMessageBox.showinfo("","DES chosen") 
+    def OnButton8Click(self):
+	self.labelVariable1.set(res)
+	tkMessageBox.showinfo("","Decrypt DES chosen") 
+    def OnButton6Click(self):
+	global res, str2
+	str2=""
+	a=[['k','e','y','a','b'],['c','d','f','g','h'],['i','l','m','n','o'],['p','q','r','s','t'],['u','v','w','x','z']]
+	for i in range(len(res)):
+		if(res[i]=='j'):
+			str2=str2+'l'
+		for j in range(5):
+			for k in range(5):
+				if(a[j][k]==res[i]):
+					if(k!=0):
+						str2=str2+a[j][k-1];
+					else:
+						str2=str2+a[j][4]	
+	self.labelVariable.set(str2)
+	tkMessageBox.showinfo("","Playfair Decrypt chosen") 
+    def OnButton7Click(self):
+	layers = int(3)
+	tkMessageBox.showinfo("","Railfence decrypt chosen") 
+	global res	
+	plainText=res
+    	#plainText = text.lower()
+	print rail1
+	print rail2	
+	print rail3
+	rail5=""
+	k=len(rail1)
+	l=len(rail2)
+	m=len(rail3)
+	k1=0
+	l1=0
+	m1=0
+	while(m1<m):
+		#print rail2[l1],
+		rail5+=rail2[l1]
+		#a.append(rail1[k1])
+		l1+=1
+		#print rail1[k1],
+		rail5+=rail1[k1]
+		k1=k1+1
+		if(m1<m):
+			#print rail3[m1],
+			rail5+=rail3[m1]
+			m1+=1
+		if(k1<k):
+			#print rail1[k1],
+			rail5+=rail1[k1]
+			k1+=1
+	while(l1<l):
+		#print rail2[l1],
+		rail5+=rail2[l1]
+		l1+=1
+		#print rail1[k1],
+		rail5+=rail1[k1]
+		k1+=1
+	print rail5
+	self.labelVariable1.set(rail5)
+	#res =cipherText 
+    def OnButton2Click(self):
+	global res
+	global word1
+	word=word1
+	res=""
+	a=[['k','e','y','a','b'],['c','d','f','g','h'],['i','l','m','n','o'],['p','q','r','s','t'],['u','v','w','x','z']]
+	for i in range(len(word)):
+		if(word[i]=='j'):
+			word=word+'l'
+		for j in range(5):
+			for k in range(5):
+				if(a[j][k]==word[i]):
+					if(k!=4):
+						res=res+a[j][k+1];
+					else:
+						res=res+a[j][0]
+		
+	self.labelVariable.set(res)
+	tkMessageBox.showinfo("","Playfair encrypt chosen") 
+	
+if __name__ == "__main__":
+   
+    app = simpleapp_tk(None)
+    app.title('Encryption')
+    app.mainloop()
